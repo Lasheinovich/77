@@ -1,0 +1,400 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "@vercel/fun": {
+      "name": "@vercel/fun",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "debug",
+        "semver",
+        "tar"
+      ],
+      "effects": [
+        "vercel"
+      ],
+      "range": "<=1.1.4",
+      "nodes": [
+        "node_modules/@vercel/fun"
+      ],
+      "fixAvailable": true
+    },
+    "@vercel/gatsby-plugin-vercel-builder": {
+      "name": "@vercel/gatsby-plugin-vercel-builder",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@vercel/routing-utils",
+        "esbuild"
+      ],
+      "effects": [
+        "@vercel/static-build"
+      ],
+      "range": "*",
+      "nodes": [
+        "node_modules/@vercel/gatsby-plugin-vercel-builder"
+      ],
+      "fixAvailable": true
+    },
+    "@vercel/node": {
+      "name": "@vercel/node",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "esbuild",
+        "path-to-regexp",
+        "undici",
+        "undici"
+      ],
+      "effects": [
+        "vercel"
+      ],
+      "range": ">=2.3.1",
+      "nodes": [
+        "node_modules/@vercel/node",
+        "node_modules/vercel/node_modules/@vercel/node"
+      ],
+      "fixAvailable": {
+        "name": "@vercel/node",
+        "version": "3.0.1",
+        "isSemVerMajor": true
+      }
+    },
+    "@vercel/redwood": {
+      "name": "@vercel/redwood",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@vercel/routing-utils"
+      ],
+      "effects": [
+        "vercel"
+      ],
+      "range": "0.6.1-canary.0 - 2.2.0",
+      "nodes": [
+        "node_modules/@vercel/redwood"
+      ],
+      "fixAvailable": true
+    },
+    "@vercel/routing-utils": {
+      "name": "@vercel/routing-utils",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "path-to-regexp"
+      ],
+      "effects": [
+        "@vercel/gatsby-plugin-vercel-builder",
+        "@vercel/redwood"
+      ],
+      "range": "<=3.1.0 || >=5.0.0",
+      "nodes": [
+        "node_modules/@vercel/routing-utils"
+      ],
+      "fixAvailable": true
+    },
+    "@vercel/static-build": {
+      "name": "@vercel/static-build",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@vercel/gatsby-plugin-vercel-builder"
+      ],
+      "effects": [
+        "vercel"
+      ],
+      "range": ">=1.3.0",
+      "nodes": [
+        "node_modules/@vercel/static-build"
+      ],
+      "fixAvailable": true
+    },
+    "debug": {
+      "name": "debug",
+      "severity": "low",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1096792,
+          "name": "debug",
+          "dependency": "debug",
+          "title": "Regular Expression Denial of Service in debug",
+          "url": "https://github.com/advisories/GHSA-gxpj-cx7g-858c",
+          "severity": "low",
+          "cwe": [
+            "CWE-400"
+          ],
+          "cvss": {
+            "score": 3.7,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+          },
+          "range": ">=4.0.0 <4.3.1"
+        }
+      ],
+      "effects": [
+        "@vercel/fun"
+      ],
+      "range": "4.0.0 - 4.3.0",
+      "nodes": [
+        "node_modules/@vercel/fun/node_modules/debug"
+      ],
+      "fixAvailable": true
+    },
+    "esbuild": {
+      "name": "esbuild",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1102341,
+          "name": "esbuild",
+          "dependency": "esbuild",
+          "title": "esbuild enables any website to send any requests to the development server and read the response",
+          "url": "https://github.com/advisories/GHSA-67mh-4wv8-2f99",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-346"
+          ],
+          "cvss": {
+            "score": 5.3,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N"
+          },
+          "range": "<=0.24.2"
+        }
+      ],
+      "effects": [
+        "@vercel/gatsby-plugin-vercel-builder",
+        "@vercel/node"
+      ],
+      "range": "<=0.24.2",
+      "nodes": [
+        "node_modules/esbuild"
+      ],
+      "fixAvailable": {
+        "name": "@vercel/node",
+        "version": "3.0.1",
+        "isSemVerMajor": true
+      }
+    },
+    "path-to-regexp": {
+      "name": "path-to-regexp",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1101846,
+          "name": "path-to-regexp",
+          "dependency": "path-to-regexp",
+          "title": "path-to-regexp outputs backtracking regular expressions",
+          "url": "https://github.com/advisories/GHSA-9wv6-86v2-598j",
+          "severity": "high",
+          "cwe": [
+            "CWE-1333"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=4.0.0 <6.3.0"
+        }
+      ],
+      "effects": [
+        "@vercel/node",
+        "@vercel/routing-utils"
+      ],
+      "range": "4.0.0 - 6.2.2",
+      "nodes": [
+        "node_modules/@vercel/routing-utils/node_modules/path-to-regexp",
+        "node_modules/path-to-regexp"
+      ],
+      "fixAvailable": {
+        "name": "@vercel/node",
+        "version": "3.0.1",
+        "isSemVerMajor": true
+      }
+    },
+    "semver": {
+      "name": "semver",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1101088,
+          "name": "semver",
+          "dependency": "semver",
+          "title": "semver vulnerable to Regular Expression Denial of Service",
+          "url": "https://github.com/advisories/GHSA-c2qf-rxjj-qqgw",
+          "severity": "high",
+          "cwe": [
+            "CWE-1333"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=7.0.0 <7.5.2"
+        }
+      ],
+      "effects": [
+        "@vercel/fun"
+      ],
+      "range": "7.0.0 - 7.5.1",
+      "nodes": [
+        "node_modules/@vercel/fun/node_modules/semver"
+      ],
+      "fixAvailable": true
+    },
+    "tar": {
+      "name": "tar",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1097493,
+          "name": "tar",
+          "dependency": "tar",
+          "title": "Denial of service while parsing a tar file due to lack of folders count validation",
+          "url": "https://github.com/advisories/GHSA-f5x3-32g6-xq36",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-400"
+          ],
+          "cvss": {
+            "score": 6.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
+          },
+          "range": "<6.2.1"
+        }
+      ],
+      "effects": [
+        "@vercel/fun"
+      ],
+      "range": "<6.2.1",
+      "nodes": [
+        "node_modules/@vercel/fun/node_modules/tar"
+      ],
+      "fixAvailable": true
+    },
+    "undici": {
+      "name": "undici",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1097200,
+          "name": "undici",
+          "dependency": "undici",
+          "title": "Undici's fetch with integrity option is too lax when algorithm is specified but hash value is in incorrect",
+          "url": "https://github.com/advisories/GHSA-9qxr-qj54-h672",
+          "severity": "low",
+          "cwe": [
+            "CWE-284"
+          ],
+          "cvss": {
+            "score": 2.6,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:L/UI:R/S:U/C:N/I:L/A:N"
+          },
+          "range": "<5.28.4"
+        },
+        {
+          "source": 1097221,
+          "name": "undici",
+          "dependency": "undici",
+          "title": "Undici proxy-authorization header not cleared on cross-origin redirect in fetch",
+          "url": "https://github.com/advisories/GHSA-3787-6prv-h9w3",
+          "severity": "low",
+          "cwe": [
+            "CWE-200"
+          ],
+          "cvss": {
+            "score": 3.9,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:H/UI:R/S:U/C:L/I:L/A:L"
+          },
+          "range": "<=5.28.2"
+        },
+        {
+          "source": 1101610,
+          "name": "undici",
+          "dependency": "undici",
+          "title": "Use of Insufficiently Random Values in undici",
+          "url": "https://github.com/advisories/GHSA-c76h-2ccp-4975",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-330"
+          ],
+          "cvss": {
+            "score": 6.8,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:N"
+          },
+          "range": ">=4.5.0 <5.28.5"
+        },
+        {
+          "source": 1102442,
+          "name": "undici",
+          "dependency": "undici",
+          "title": "Undici's Proxy-Authorization header not cleared on cross-origin redirect for dispatch, request, stream, pipeline",
+          "url": "https://github.com/advisories/GHSA-m4v8-wqvr-p9f7",
+          "severity": "low",
+          "cwe": [
+            "CWE-200",
+            "CWE-285",
+            "CWE-863"
+          ],
+          "cvss": {
+            "score": 3.9,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:H/UI:R/S:U/C:L/I:L/A:L"
+          },
+          "range": "<5.28.4"
+        }
+      ],
+      "effects": [
+        "@vercel/node"
+      ],
+      "range": "<=5.28.4",
+      "nodes": [
+        "node_modules/@vercel/node/node_modules/undici",
+        "node_modules/undici"
+      ],
+      "fixAvailable": {
+        "name": "@vercel/node",
+        "version": "3.0.1",
+        "isSemVerMajor": true
+      }
+    },
+    "vercel": {
+      "name": "vercel",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "@vercel/fun",
+        "@vercel/node",
+        "@vercel/redwood",
+        "@vercel/static-build"
+      ],
+      "effects": [],
+      "range": ">=24.2.5-canary.0",
+      "nodes": [
+        "node_modules/vercel"
+      ],
+      "fixAvailable": true
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 1,
+      "moderate": 4,
+      "high": 8,
+      "critical": 0,
+      "total": 13
+    },
+    "dependencies": {
+      "prod": 1722,
+      "dev": 294,
+      "optional": 121,
+      "peer": 0,
+      "peerOptional": 0,
+      "total": 2110
+    }
+  }
+}
