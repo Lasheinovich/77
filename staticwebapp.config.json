@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json.schemastore.org/staticwebapp.config.json",
+  "routes": [
+    {
+      "route": "/api/*",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "rewrite": "https://${API_GATEWAY_URL}/api/$1"
+    },
+    {
+      "route": "/auth/*",
+      "rewrite": "/auth/$1"
+    },
+    {
+      "route": "/admin/*",
+      "allowedRoles": [
+        "authenticated",
+        "admin"
+      ]
+    },
+    {
+      "route": "/*",
+      "serve": "/index.html",
+      "statusCode": 200
+    }
+  ],
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": [
+      "/images/*.{png,jpg,gif,webp}",
+      "/css/*",
+      "/js/*",
+      "/api/*"
+    ]
+  },
+  "responseOverrides": {
+    "400": {
+      "rewrite": "/error/400.html",
+      "statusCode": 400
+    },
+    "401": {
+      "rewrite": "/auth/login",
+      "statusCode": 302
+    },
+    "403": {
+      "rewrite": "/error/403.html",
+      "statusCode": 403
+    },
+    "404": {
+      "rewrite": "/error/404.html",
+      "statusCode": 404
+    }
+  },
+  "globalHeaders": {
+    "Content-Security-Policy": "default-src 'self' https://*.azurestaticapps.net https://*.arkacademy.org; script-src 'self' 'unsafe-inline' https://*.azurestaticapps.net https://*.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://*.arkacademy.org; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://*.arkacademy.org https://*.azure-api.net https://*.applicationinsights.azure.com",
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "X-XSS-Protection": "1; mode=block",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=()"
+  },
+  "mimeTypes": {
+    ".json": "application/json",
+    ".webmanifest": "application/manifest+json"
+  },
+  "auth": {
+    "identityProviders": {
+      "azureActiveDirectory": {
+        "registration": {
+          "openIdIssuer": "https://login.microsoftonline.com/${TENANT_ID}/v2.0",
+          "clientIdSettingName": "AZURE_CLIENT_ID",
+          "clientSecretSettingName": "AZURE_CLIENT_SECRET"
+        }
+      }
+    }
+  }
+}

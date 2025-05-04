@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Checking code quality before commit..."
+
+# Run type checking
+echo "📋 Running TypeScript checks..."
+npm run typecheck || { echo "❌ TypeScript check failed. Please fix the errors before committing."; exit 1; }
+
+# Run linting
+echo "🧹 Running lint checks..."
+npm run lint || { echo "❌ Lint check failed. Please fix the errors before committing."; exit 1; }
+
+# Format code
+echo "✨ Formatting code..."
+npm run format || { echo "❌ Code formatting failed. Please fix the issues before committing."; exit 1; }
+
+# Security audit
+echo "🔒 Running security audit..."
+npm run security:check || echo "⚠️ Security audit found issues. Review .ark7_hyperlogs/npm-audit-report.json"
+
+echo "✅ Code checks passed! Committing..."

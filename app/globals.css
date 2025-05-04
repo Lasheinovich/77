@@ -1,0 +1,345 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+
+    --radius: 0.5rem;
+
+    /* Accessibility variables */
+    --a11y-font-size-factor: 1;
+    --a11y-line-height: 1.5;
+    --a11y-letter-spacing: 0px;
+    --a11y-word-spacing: 0px;
+    --a11y-reduced-motion: initial;
+    --a11y-animations: default;
+    --a11y-focus-outline-width: 3px;
+    --a11y-focus-outline-color: hsl(var(--primary));
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Accessibility styles */
+  html {
+    font-size: calc(100% * var(--a11y-font-size-factor));
+  }
+
+  body {
+    line-height: var(--a11y-line-height);
+    letter-spacing: var(--a11y-letter-spacing);
+    word-spacing: var(--a11y-word-spacing);
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Override reduced motion preference when user explicitly enables animations */
+  body:not(.a11y-reduced-motion) * {
+    animation-duration: var(--a11y-animation-duration, initial) !important;
+    transition-duration: var(--a11y-transition-duration, initial) !important;
+  }
+
+  /* Apply reduced motion when user explicitly disables animations */
+  body.a11y-reduced-motion * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Animation preferences */
+  body:has(#animations[value="reduced"]) * {
+    --a11y-animation-duration: 50% !important;
+    --a11y-transition-duration: 50% !important;
+  }
+
+  body:has(#animations[value="minimal"]) * {
+    --a11y-animation-duration: 25% !important;
+    --a11y-transition-duration: 25% !important;
+  }
+
+  body:has(#animations[value="none"]) * {
+    --a11y-animation-duration: 0.01ms !important;
+    --a11y-transition-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Dyslexic font */
+  .a11y-dyslexic-font {
+    font-family: "OpenDyslexic", sans-serif;
+  }
+
+  /* Font families */
+  .a11y-font-sans {
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  .a11y-font-serif {
+    font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  }
+
+  .a11y-font-mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+
+  .a11y-font-dyslexic {
+    font-family: "OpenDyslexic", sans-serif;
+  }
+
+  .a11y-font-readable {
+    font-family: "Atkinson Hyperlegible", sans-serif;
+  }
+
+  /* Big cursor */
+  .a11y-big-cursor {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3z'/%3E%3Cpath d='m13 13 6 6'/%3E%3C/svg%3E")
+      0 0, auto !important;
+  }
+
+  /* Enhanced keyboard navigation */
+  .a11y-keyboard-nav:focus-visible {
+    outline: var(--a11y-focus-outline-width) solid var(--a11y-focus-outline-color) !important;
+    outline-offset: 2px !important;
+  }
+
+  /* Enhanced focus indicators */
+  .a11y-focus-indicator *:focus-visible {
+    outline: var(--a11y-focus-outline-width) solid var(--a11y-focus-outline-color) !important;
+    outline-offset: 2px !important;
+  }
+
+  /* High contrast mode */
+  .a11y-high-contrast {
+    filter: contrast(1.5);
+  }
+
+  .a11y-low-contrast {
+    filter: contrast(0.8);
+  }
+
+  /* Color schemes */
+  .a11y-color-scheme-high-contrast {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --primary: 240 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    filter: contrast(1.2);
+  }
+
+  .a11y-color-scheme-dark-high-contrast {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --primary: 60 100% 50%;
+    --primary-foreground: 0 0% 0%;
+    filter: contrast(1.2);
+  }
+
+  .a11y-color-scheme-yellow-black {
+    --background: 60 100% 50%;
+    --foreground: 0 0% 0%;
+    --primary: 0 0% 0%;
+    --primary-foreground: 60 100% 50%;
+    --card: 60 100% 50%;
+    --card-foreground: 0 0% 0%;
+    --popover: 60 100% 50%;
+    --popover-foreground: 0 0% 0%;
+    --secondary: 60 80% 40%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 60 80% 40%;
+    --muted-foreground: 0 0% 0%;
+    --accent: 60 80% 40%;
+    --accent-foreground: 0 0% 0%;
+    --border: 0 0% 0%;
+    --input: 0 0% 0%;
+    --ring: 0 0% 0%;
+  }
+
+  .a11y-color-scheme-black-yellow {
+    --background: 0 0% 0%;
+    --foreground: 60 100% 50%;
+    --primary: 60 100% 50%;
+    --primary-foreground: 0 0% 0%;
+    --card: 0 0% 0%;
+    --card-foreground: 60 100% 50%;
+    --popover: 0 0% 0%;
+    --popover-foreground: 60 100% 50%;
+    --secondary: 0 0% 20%;
+    --secondary-foreground: 60 100% 50%;
+    --muted: 0 0% 20%;
+    --muted-foreground: 60 100% 50%;
+    --accent: 0 0% 20%;
+    --accent-foreground: 60 100% 50%;
+    --border: 60 100% 50%;
+    --input: 60 100% 50%;
+    --ring: 60 100% 50%;
+  }
+}
+
+/* RTL Support */
+[dir="rtl"] .flip-in-rtl {
+  transform: scaleX(-1);
+}
+
+/* Skip to content link */
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  padding: 8px;
+  z-index: 100;
+  transition: top 0.2s;
+}
+
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.5s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.5s ease-out;
+}
+
+.animate-pulse-slow {
+  animation: pulse 2s infinite;
+}
+
+/* Responsive typography */
+@media (max-width: 640px) {
+  html {
+    font-size: calc(90% * var(--a11y-font-size-factor));
+  }
+}
+
+@media (min-width: 1536px) {
+  html {
+    font-size: calc(110% * var(--a11y-font-size-factor));
+  }
+}
