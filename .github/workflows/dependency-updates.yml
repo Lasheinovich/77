@@ -1,12 +1,12 @@
-name: Dependency Updates
+name: Dependency and Security Automation
 
 on:
   schedule:
-    - cron: '0 0 * * 0'  # Run weekly on Sundays
-  workflow_dispatch:  # Allow manual triggering
+    - cron: '0 0 * * 0'  # Weekly on Sundays
+  workflow_dispatch:  # Manual trigger
 
 jobs:
-bandit-sast:
+  bandit-sast:
     name: 🐍 Python SAST (Bandit)
     runs-on: ubuntu-latest
     steps:
@@ -22,9 +22,16 @@ bandit-sast:
     steps:
       - uses: actions/checkout@v4
       - name: Install Safety
-        run: pip install safety && pip install -r backend/requirements.txt
+        run: |
+          pip install safety
+          pip install -r backend/requirements.txt
       - name: Run safety check
-        run: safety check
+        run: safety check --full-report > safety-report.txt
+      - name: Upload safety report
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-safety-report
+          path: safety-report.txt
 
   npm-audit:
     name: 📦 npm Audit
@@ -36,28 +43,30 @@ bandit-sast:
       - uses: actions/checkout@v4
       - run: npm ci
       - run: npm audit --audit-level=moderate
+
   update-dependencies:
+    name: 🧰 Update & Audit Frontend Deps
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 10.10.0
           run_install: false
-          
+
       - name: Get pnpm store directory
         id: pnpm-cache
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-          
+
       - uses: actions/cache@v3
         name: Setup pnpm cache
         with:
@@ -65,46 +74,70 @@ bandit-sast:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
-        
+
       - name: Install dependencies
         run: pnpm install
-        
+        working-directory: frontend
+
       - name: Run security audit
         run: pnpm audit --json > security-audit.json || true
-        
+        working-directory: frontend
+
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-security-audit
+          path: frontend/security-audit.json
+
+      - name: Fail on high severity CVEs
+        run: |
+          if grep -q '"severity": "high"' frontend/security-audit.json; then
+            echo "❌ High severity vulnerabilities detected!"
+            exit 1
+          fi
+
       - name: Check for updates
         run: npx npm-check-updates -u
-        
+        working-directory: frontend
+
       - name: Install updated dependencies
         run: pnpm install
-        
+        working-directory: frontend
+
       - name: Type check
-        run: pnpm run typecheck || echo "Type check failed, but continuing"
-        
+        run: pnpm run typecheck || echo "⚠️ Type check failed, continuing"
+        working-directory: frontend
+
       - name: Lint check
-        run: pnpm run lint || echo "Lint check failed, but continuing"
-        
+        run: pnpm run lint || echo "⚠️ Linting failed, continuing"
+        working-directory: frontend
+
       - name: Build application
         run: pnpm run build
-        
+        working-directory: frontend
+
       - name: Run tests
-        run: pnpm run test:unit || echo "Tests failed, but continuing"
-        
+        run: pnpm run test:unit || echo "⚠️ Tests failed, continuing"
+        working-directory: frontend
+
+      - name: Prepare PR body
+        run: |
+          echo "This PR updates project dependencies to their latest versions." > pr-body.txt
+          echo "" >> pr-body.txt
+          echo "## Changes" >> pr-body.txt
+          echo "- Updated frontend dependencies" >> pr-body.txt
+          echo "- Re-ran security audit" >> pr-body.txt
+          echo "" >> pr-body.txt
+          echo "## Security Audit Summary" >> pr-body.txt
+          cat frontend/security-audit.json >> pr-body.txt
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'chore: update dependencies'
-          title: 'chore: update dependencies'
-          body: |
-            This PR updates project dependencies to their latest versions.
-            
-            ## Changes
-            - Updated dependencies to latest versions
-            - Build verified
-            ${GITHUB_OUTPUT//*security-audit.json*/- Security audit review required\n/}
-            
-            Please review carefully before merging.
+          commit-message: 'chore: update frontend dependencies'
+          title: 'chore: update frontend dependencies'
+          body-path: pr-body.txt
           branch: 'chore/dependency-updates'
-          base: 'develop'  # Target the develop branch
-          labels: 'dependencies,automated pr'
+          base: 'develop'
+          labels: 'dependencies, automated pr'
