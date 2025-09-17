@@ -50,7 +50,7 @@ export function withRateLimit<T extends unknown[]>(
         const redisResetKey = `ratelimit:${key}:reset`
 
         // Get or set reset time
-        let storedResetTime = await redis.get(redisResetKey)
+        const storedResetTime = await redis.get(redisResetKey)
         if (!storedResetTime || parseInt(storedResetTime) < now) {
           resetTime = now + windowMs
           await redis.set(redisResetKey, resetTime.toString(), windowMs)
